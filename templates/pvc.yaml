@@ -1,0 +1,28 @@
+{{- if and (eq .Values.runners.cache.cacheType "pvc") (not .Values.persistence.existingclaim) }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "gitlab-runner.fullname" . }}-cache
+  labels:
+    app: {{ include "gitlab-runner.fullname" . }}
+    chart: {{ include "gitlab-runner.chart" . }}
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+{{- if .Values.persistence.annotations }}
+  annotations:
+{{ toYaml .Values.persistence.annotations | indent 4 }}
+{{- end }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.size | quote }}
+  {{- if .Values.persistence.storageClass }}
+  {{- if (eq "-" .Values.persistence.storageClass) }}
+  storageClassName: ""
+  {{- else }}
+  storageClassName: "{{ .Values.persistence.storageClass }}"
+  {{- end }}
+  {{- end }}
+{{- end }}
