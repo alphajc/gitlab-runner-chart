@@ -9,7 +9,10 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 rules:
-- apiGroups: [""]
+- apiGroups:
+  - ""
+  - apps
+  - extensions
   {{- if .Values.rbac.resources }}
   resources: [{{ join ", " .Values.rbac.resources }}]
   {{- else }}

@@ -36,7 +36,7 @@
 - name: KUBERNETES_MEMORY_REQUEST
   value: {{ default "" .Values.runners.builds.memoryRequests| quote }}
 - name: KUBERNETES_SERVICE_ACCOUNT
-  value: {{ default "" .Values.runners.serviceAccountName | quote }}
+  value: {{ include "gitlab-runner.fullname" . }}
 - name: KUBERNETES_SERVICE_CPU_LIMIT
   value: {{ default "" .Values.runners.services.cpuLimit | quote }}
 - name: KUBERNETES_SERVICE_MEMORY_LIMIT
