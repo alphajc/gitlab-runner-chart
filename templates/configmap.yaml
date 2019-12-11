@@ -88,6 +88,13 @@ data:
         --access-level="ref_protected" \
         {{- end }}
         --non-interactive
+      {{- if eq .Values.runners.cache.cacheType "pvc" }}
+      cat << 'EOF' >> /home/gitlab-runner/.gitlab-runner/config.toml
+            [[runners.kubernetes.volumes.pvc]]
+              name = "{{ include "gitlab-runner.fullname" . }}-cache"
+              mount_path = "{{ .Values.runners.cache.cachePath }}"
+    EOF
+      {{- end }}
 
       retval=$?
 
